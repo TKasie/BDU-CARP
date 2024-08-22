@@ -18,7 +18,7 @@ st.sidebar.title('About')
 st.sidebar.info('Explore one of the four key risk analysis outputs of the BDU-CARP research team')
 
 
-gdf_file_path = 'data/rmetric_gdf.shp'
+gdf_file_path = 'rmetric_gdf.shp'
 @st.cache_data
 def read_gdf(file_path):
     gdf = gpd.read_file(file_path)
