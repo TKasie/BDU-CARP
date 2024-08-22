@@ -38,7 +38,7 @@ selected_RL_gdf = uais_gdf[uais_gdf.LReport==reporting_level]
 selected_ML_gdf = selected_RL_gdf[selected_RL_gdf.l_metric==metric_type]
 
 fig, ax = plt.subplots(1, 1)
-selected_ML_gdf.plot(column='loss_rel', ax=ax, cmap='Reds', figsize=(8, 8))
+selected_ML_gdf.plot(column='loss_rel', ax=ax, cmap='Reds', figsize=(8, 8), legend=True)
 stats = st.sidebar.pyplot(fig)
 
 # Dashboard Main Panel
