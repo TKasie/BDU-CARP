@@ -24,7 +24,7 @@ st.set_page_config(
 hd1, hd2 = st.columns((0.07,1)) 
 
 hd1, hd2 = st.columns((0.2, 1))
-hd1.image('carp_bdu_research_outputs/images/index.png', width=100)
+hd1.image('index.png', width=100)
 hd2.title('Drought-related Yield Loss Estimates for Amhara Region, Ethiopia')
 hd2.markdown(" **tel:** +251 934 97 6251 **| website:** https://www.bdu.edu.et **| email:** tesfahun.asmamaw@bdu.edu.et")
 
