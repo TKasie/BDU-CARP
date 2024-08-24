@@ -8,6 +8,7 @@ import time
 import streamlit as st
 import geopandas as gpd
 import pandas as pd
+import matplotlib
 import matplotlib.pyplot as plt
 import altair as alt
 import plotly.express as px
