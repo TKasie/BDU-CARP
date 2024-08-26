@@ -15,25 +15,22 @@ import plotly.express as px
 
 st.set_page_config(
     page_title="BDU-CARP Research Team - Drought Risk Analysis",
-    page_icon=":ambulance:",
+    page_icon=":rain:",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
 
 #Page header
-hd1, hd2 = st.columns((0.07,1)) 
-
-hd1, hd2 = st.columns((0.2, 1))
-hd1.image('index.png', width=100)
-hd2.title('Drought-related Yield Loss Estimates for Amhara Region, Ethiopia')
-hd2.markdown(" **tel:** +251 934 97 6251 **| website:** https://www.bdu.edu.et **| email:** tesfahun.asmamaw@bdu.edu.et")
+st.image('index2.png', width=400)
+st.header('Drought-related Yield Loss Estimates for Amhara Region, Ethiopia')
+st.markdown(" **Institute website:** https://www.bdu.edu.et/idrmfss **| Outreach focal- tel:** +251 918 71 6473 **| email:** Mossa.Endris@bdu.edu.et")
 
 alt.themes.enable("dark")
 
 st.sidebar.title('About')
-with st.sidebar.expander("Click here for page overview"):
-    st.info("This dashboard was built to share [BDU-CARP resaerch findings](https://hats.arizona.edu/baseline-probabilistic-climate-risk-assessment-information-foundation-scaling-smallholder) with the general DRM community and help users to explore drought risk analysis outputs produced by the BDU-CARP research team for Amhara region, Ethiopia. Drought-related yield losses on six important risk metrics are reported at three levels: (1) Insurance zones which are newly defined using an ML cluster algorithm; (2) Livelihood zones as defined by [FEWS NET](https://fews.net/east-africa/ethiopia/livelihood-zone-map/january-2018); and (3) Administrative zones of Amhara region. Users can select their preferred reporting level from the sidebar and explore each of the risk metrics. This is our attept to satisfy the interests of multiple actors operating at different scales of DRM decision making. Note that yield losses are estimated based on the vulnerability curve we established for each insurance zone using a regression model of yield as a function of growing season precipitation anomally. FAO-WaPOR biomass production dataset was used for yield and CHIRIPS dataset for precipitation. Figures shown in the first row of the page are based on relative losses in percent. Absolute losses in KgDM/ha are also shown in the bar graph at the end of the page in addition to the map in the sidebar to visualize its spatial distribution.")
+with st.sidebar.expander("Click here"):
+    st.info("This dashboard was built to share [BDU-CARP resaerch findings](https://hats.arizona.edu/baseline-probabilistic-climate-risk-assessment-information-foundation-scaling-smallholder) with the general DRM community and help users to explore drought risk analysis outputs produced by the BDU-CARP research team for Amhara region, Ethiopia. Drought-related yield losses on six important risk metrics are reported at three levels: (1) Insurance zones which are newly defined using an ML cluster algorithm; (2) Livelihood zones as defined by [FEWS NET](https://fews.net/east-africa/ethiopia/livelihood-zone-map/january-2018); and (3) Administrative zones of Amhara region. Users can select their preferred reporting level from the sidebar and explore each of the risk metrics. This is our attept to satisfy the interests of multiple actors operating at different scales of DRM decision making. Note that yield losses are estimated based on the vulnerability curve we established for each insurance zone using a regression model of yield as a function of growing season precipitation anomally. FAO-WaPOR biomass production dataset was used for yield and CHIRIPS dataset for precipitation. Maps shown in the second column of the main panel are expressed as relative losses in percent, relative to exposure, shown at the top; as well as absolute losses in KgDM/ha, shown at the bottom, same column. Users can hover over the map to see specific info.")
 
 
 gdf_file_path = 'rmetric_gdf.shp'
@@ -57,18 +54,12 @@ metric_type = st.sidebar.selectbox('Select a Risk Metric', metric_types)
 selected_RL_gdf = uais_gdf[uais_gdf.LReport==reporting_level]
 selected_ML_gdf = selected_RL_gdf[selected_RL_gdf.l_metric==metric_type]
 
-
-fig, ax = plt.subplots(1, 1)
-selected_ML_gdf.plot(column='loss_abs', ax=ax, edgecolor='w', cmap='Reds', figsize=(8, 8), legend=True)
-plt.title('Absolute loss [KgDM/ha]')
-gdf_plot = st.sidebar.pyplot(fig)
-
 # Dashboard Main Panel
-col = st.columns((2, 4, 2.5), gap='medium')
+col = st.columns((2.5, 4.5, 2.5), gap='medium')
 selected_ML_gdf_sorted = selected_ML_gdf[['Zone-ID', 'l_metric', 'Exposure']].sort_values('Exposure', ascending=False)
 
 with col[0]:
-    st.markdown('#### Exposure')
+    st.markdown('##### Exposure')
     st.dataframe(selected_ML_gdf_sorted, 
                  column_order=("Zone-ID", "Exposure"),
                  hide_index=True,
@@ -85,19 +76,51 @@ with col[0]:
                      )}
                 )
 
+# dataframe for choropleth map
+selected_ML_gdf_loc = selected_ML_gdf.set_index('Zone-ID')
 
 with col[1]:
-    st.markdown('#### Yield Loss Relative to Exposure')
-    fig, ax = plt.subplots(1, 1)
-    selected_ML_gdf.plot(column='Yield loss (%)', ax=ax, edgecolor='w', cmap='Reds', figsize=(8, 8), legend=True)
-    gdf_plot = st.pyplot(fig)
-
+    st.markdown('##### Yield Loss: Top(%); Bottom(Kg/ha)')
+    choropleth = px.choropleth(selected_ML_gdf,
+                               geojson = selected_ML_gdf_loc.geometry, 
+                               locations = selected_ML_gdf_loc.index, 
+                               color = 'Yield loss (%)', 
+                               color_continuous_scale="Reds",
+                               projection='mercator',
+                               range_color=(selected_ML_gdf_loc['Yield loss (%)'].min(),
+                                            selected_ML_gdf_loc['Yield loss (%)'].max()),
+                               labels={'Yield loss (%)':''})
+                                                                                       
     
+    choropleth.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, 
+                             template='plotly_dark', 
+                             height=200,
+                             legend=dict(orientation="v", yanchor="bottom", y=0.9, xanchor="right", x=0.5))
+    choropleth.update_geos(fitbounds='locations', visible=False)
+    st.plotly_chart(choropleth, template='streamlit', use_container_width=True)
+    
+    choropleth = px.choropleth(selected_ML_gdf,
+                               geojson = selected_ML_gdf_loc.geometry, 
+                               locations = selected_ML_gdf_loc.index, 
+                               color = 'loss_abs', 
+                               color_continuous_scale="Reds",
+                               projection='mercator',
+                               range_color=(selected_ML_gdf_loc.loss_abs.min(),
+                                            selected_ML_gdf_loc.loss_abs.max()),
+                               labels={'loss_abs':''})
+    
+    choropleth.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, 
+                             template='plotly_dark', 
+                             height=200,
+                             legend=dict(orientation="v", yanchor="bottom", y=0.9, xanchor="right", x=0.5))
+    choropleth.update_geos(fitbounds='locations', visible=False)
+    st.plotly_chart(choropleth, template='streamlit', use_container_width=True)
+
 # Top zones sorted by descending order of yield loss
 selected_ML_gdf_sorted = selected_ML_gdf[['Zone-ID', 'l_metric', 'loss_rel', 'Yield loss (%)']].sort_values('Yield loss (%)', ascending=False)
 
 with col[2]:
-    st.markdown('#### Top Zones')
+    st.markdown('##### Top Zones')
     st.dataframe(selected_ML_gdf_sorted, 
                  column_order=("Zone-ID", "Yield loss (%)"),
                  hide_index=True,
@@ -140,6 +163,7 @@ st.altair_chart(heatmap1, use_container_width=True)
 #Bar graph by risk metrics
 bar_gr = px.bar(selected_RL_gdf, x='Zone-ID', y='loss_abs', barmode='relative', color='l_metric', title="Yield Loss [KgDM/ha]")
 st.plotly_chart(bar_gr)
+
 #bar_gr = px.bar(selected_RL_gdf, x='Zone-ID', y='Yield loss (%)', barmode='overlay', color='l_metric')
 #st.plotly_chart(bar_gr)
 
@@ -152,3 +176,4 @@ with st.expander("Contact us"):
         st.text_area("Query","Please specify your request or general comment here")  
         
         submit_button = st.form_submit_button(label='Send Information')
+        
