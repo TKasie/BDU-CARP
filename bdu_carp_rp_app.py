@@ -161,7 +161,7 @@ st.altair_chart(heatmap1, use_container_width=True)
 
 
 # Top 10 bad/good years by UaI zone
-data = pd.read_csv('carp_bdu_research_outputs/data_top_bad_good_years_by_uai.csv', index_col=[0])
+data = pd.read_csv('data_top_bad_good_years_by_uai.csv', index_col=[0])
 years_str = data.columns[3:]
 uai_code = [i for i in range(15)]
 
