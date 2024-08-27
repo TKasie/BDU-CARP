@@ -24,7 +24,6 @@ st.set_page_config(
 #Page header
 st.image('index2.png', width=400)
 st.header('Drought-related Yield Loss Estimates for Amhara Region, Ethiopia')
-st.markdown(" **Institute website:** https://www.bdu.edu.et/idrmfss **| Outreach focal- tel:** +251 918 71 6473 **| email:** Mossa.Endris@bdu.edu.et")
 
 alt.themes.enable("dark")
 
@@ -263,6 +262,8 @@ with col2:
                      )}
                 )
 
+
+st.markdown(" **Institute website:** https://www.bdu.edu.et/idrmfss **| Outreach focal- tel:** +251 918 71 6473 **| email:** Mossa.Endris@bdu.edu.et")
 
 # Contact Form
 
