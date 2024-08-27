@@ -161,15 +161,17 @@ st.altair_chart(heatmap1, use_container_width=True)
 
 
 # Top 10 bad/good years by UaI zone
-data = pd.read_csv('data_top_bad_good_years_by_uai.csv', index_col=[0])
+data = pd.read_csv('carp_bdu_research_outputs/data_top_bad_good_years_by_uai.csv', index_col=[0])
 years_str = data.columns[3:]
 uai_code = [i for i in range(15)]
 
+st.subheader('Top 10 Bad/Good Years by Insurance Zone')
+uai_zone = st.selectbox('Select an Insurance zone code', uai_code)
 col1, col2 = st.columns((1, 1))
 
 with col1:
-    st.markdown('##### Top 10 Bad Years by Insurance zone')
-    uai_zone = st.selectbox('Select an Insurance zone code for bad years', uai_code)
+    st.markdown('##### Top 10 Bad Years')
+    #uai_zone = st.selectbox('Select an Insurance zone code for bad years', uai_code)
     data_bad = data[data.CWW15==uai_zone][years_str].median().sort_values(ascending=False).reset_index().rename(columns={'index': 'Year', 0:'Rank'})
     st.dataframe(data_bad, 
                  column_order=("Year", "Rank"),
@@ -190,8 +192,8 @@ with col1:
 
 
 with col2:
-    st.markdown('##### Top 10 Good Years by Insurance zone')
-    uai_zone = st.selectbox('Select an Insurance zone code for good years', uai_code)
+    st.markdown('##### Top 10 Good Years')
+    #uai_zone = st.selectbox('Select an Insurance zone code for good years', uai_code)
     data_bad = data[data.CWW15==uai_zone][years_str].median().sort_values(ascending=False).reset_index().rename(columns={'index': 'Year', 0:'Rank2'})
     data_good = data_bad.copy()
     data_good['Rank']= 1 - data_bad.Rank2
@@ -213,9 +215,10 @@ with col2:
                      )}
                 )
 
+st.subheader('Region-level Top 10 Bad/Good Years')
 col1, col2 = st.columns((1, 1))
 with col1:
-    st.markdown('##### Region-level Top 10 Bad Years')
+    st.markdown('##### Top 10 Bad Years')
     #uai_zone = st.selectbox('Select an Insurance zone code for bad years', uai_code)
     data_bad = data[years_str].median().sort_values(ascending=False).reset_index().rename(columns={'index': 'Year', 0:'Rank'})
     st.dataframe(data_bad, 
@@ -236,7 +239,7 @@ with col1:
                 )
 
 with col2:
-    st.markdown('##### Region-level Top 10 Good Years')
+    st.markdown('##### Top 10 Good Years')
     #uai_zone = st.selectbox('Select an Insurance zone code for bad years', uai_code)
     data_bad = data[years_str].median().sort_values(ascending=False).reset_index().rename(columns={'index': 'Year', 0:'Rank2'})
     data_good = data_bad.copy()
