@@ -160,12 +160,106 @@ heatmap1 = make_heatmap(selected_RL_gdf[['Zone-ID', 'l_metric', 'loss_abs', 'Yie
 st.altair_chart(heatmap1, use_container_width=True)
 
 
-#Bar graph by risk metrics
-bar_gr = px.bar(selected_RL_gdf, x='Zone-ID', y='loss_abs', barmode='relative', color='l_metric', title="Yield Loss [KgDM/ha]")
-st.plotly_chart(bar_gr)
+# Top 10 bad/good years by UaI zone
+data = pd.read_csv('carp_bdu_research_outputs/data_top_bad_good_years_by_uai.csv', index_col=[0])
+years_str = data.columns[3:]
+uai_code = [i for i in range(15)]
 
-#bar_gr = px.bar(selected_RL_gdf, x='Zone-ID', y='Yield loss (%)', barmode='overlay', color='l_metric')
-#st.plotly_chart(bar_gr)
+col1, col2 = st.columns((1, 1))
+
+with col1:
+    st.markdown('##### Top 10 Bad Years by Insurance zone')
+    uai_zone = st.selectbox('Select an Insurance zone code for bad years', uai_code)
+    data_bad = data[data.CWW15==uai_zone][years_str].median().sort_values(ascending=False).reset_index().rename(columns={'index': 'Year', 0:'Rank'})
+    st.dataframe(data_bad, 
+                 column_order=("Year", "Rank"),
+                 hide_index=True,
+                 width=None,
+                 use_container_width=True,
+                 column_config={
+                    "Year": st.column_config.TextColumn(
+                        "Year",
+                    ),
+                    "Rank": st.column_config.ProgressColumn(
+                        "Rank",
+                        format="%.2f",
+                        min_value=0,
+                        max_value=max(data_bad.Rank),
+                     )}
+                )
+
+
+with col2:
+    st.markdown('##### Top 10 Good Years by Insurance zone')
+    uai_zone = st.selectbox('Select an Insurance zone code for good years', uai_code)
+    data_bad = data[data.CWW15==uai_zone][years_str].median().sort_values(ascending=False).reset_index().rename(columns={'index': 'Year', 0:'Rank2'})
+    data_good = data_bad.copy()
+    data_good['Rank']= 1 - data_bad.Rank2
+    data_good = data_good.sort_values('Rank', ascending=False)
+    st.dataframe(data_good, 
+                 column_order=("Year", "Rank"),
+                 hide_index=True,
+                 width=None,
+                 use_container_width=True,
+                 column_config={
+                    "Year": st.column_config.TextColumn(
+                        "Year",
+                    ),
+                    "Rank": st.column_config.ProgressColumn(
+                        "Rank",
+                        format="%.2f",
+                        min_value=0,
+                        max_value=max(data_good.Rank),
+                     )}
+                )
+
+col1, col2 = st.columns((1, 1))
+with col1:
+    st.markdown('##### Region-level Top 10 Bad Years')
+    #uai_zone = st.selectbox('Select an Insurance zone code for bad years', uai_code)
+    data_bad = data[years_str].median().sort_values(ascending=False).reset_index().rename(columns={'index': 'Year', 0:'Rank'})
+    st.dataframe(data_bad, 
+                 column_order=("Year", "Rank"),
+                 hide_index=True,
+                 width=None,
+                 use_container_width=True,
+                 column_config={
+                    "Year": st.column_config.TextColumn(
+                        "Year",
+                    ),
+                    "Rank": st.column_config.ProgressColumn(
+                        "Rank",
+                        format="%.2f",
+                        min_value=0,
+                        max_value=max(data_bad.Rank),
+                     )}
+                )
+
+with col2:
+    st.markdown('##### Region-level Top 10 Good Years')
+    #uai_zone = st.selectbox('Select an Insurance zone code for bad years', uai_code)
+    data_bad = data[years_str].median().sort_values(ascending=False).reset_index().rename(columns={'index': 'Year', 0:'Rank2'})
+    data_good = data_bad.copy()
+    data_good['Rank']= 1 - data_bad.Rank2
+    data_good = data_good.sort_values('Rank', ascending=False)
+    
+    st.dataframe(data_good, 
+                 column_order=("Year", "Rank"),
+                 hide_index=True,
+                 width=None,
+                 use_container_width=True,
+                 column_config={
+                    "Year": st.column_config.TextColumn(
+                        "Year",
+                    ),
+                    "Rank": st.column_config.ProgressColumn(
+                        "Rank",
+                        format="%.2f",
+                        min_value=0,
+                        max_value=max(data_good.Rank),
+                     )}
+                )
+
 
 # Contact Form
 
