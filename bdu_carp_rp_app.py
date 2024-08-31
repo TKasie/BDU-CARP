@@ -21,8 +21,8 @@ st.set_page_config(
 )
 
 
-#Page header
-st.image('index2.png', width=400)
+#Page header/ logo
+st.logo(image='Horizontal_RGB_294_White.png', icon_image='index2.png')  
 st.header('Drought-related Yield Loss Estimates for Amhara Region, Ethiopia')
 
 alt.themes.enable("dark")
