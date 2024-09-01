@@ -263,7 +263,7 @@ with col2:
                 )
 
 
-st.markdown(" **Institute website:** https://www.bdu.edu.et/idrmfss **| Institute email:** IDRMFSSBDU@gmail.com **| Outreach focal email:** Mossa.Endris@bdu.edu.et")
+st.markdown(" **Institute website:** https://www.bdu.edu.et/idrmfss **| Institute email:** IDRMFSSBDU@gmail.com **| Project PI email:** Tesfahun.Asmamaw@bdu.edu.et **| Outreach focal email:** Mossa.Endris@bdu.edu.et")
 
 # Contact Form
 
