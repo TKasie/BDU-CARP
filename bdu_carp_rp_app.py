@@ -263,7 +263,7 @@ with col2:
                 )
 
 
-st.markdown(" **Institute website:** https://www.bdu.edu.et/idrmfss **| Outreach focal- tel:** +251 918 71 6473 **| email:** Mossa.Endris@bdu.edu.et")
+st.markdown(" **Institute website:** https://www.bdu.edu.et/idrmfss **| Institute email:** IDRMFSSBDU@gmail.com **| Outreach focal email:** Mossa.Endris@bdu.edu.et")
 
 # Contact Form
 
