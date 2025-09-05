@@ -22,7 +22,7 @@ st.set_page_config(
 
 
 #Page header/ logo
-st.logo(image='BDU-CARP-main/Horizontal_RGB_294_White.png', icon_image='BDU-CARP-main/index2.png')   
+#st.logo(image='BDU-CARP-main/Horizontal_RGB_294_White.png', icon_image='BDU-CARP-main/index2.png')   
 st.header('Drought-related Yield Loss Estimates for Amhara Region, Ethiopia')
 
 alt.themes.enable("dark")
@@ -137,26 +137,26 @@ with col[2]:
                  )
 
 # Heatmap
-def make_heatmap(input_df, input_y, input_x, input_color, input_color_theme):
-    heatmap = alt.Chart(input_df).mark_rect().encode(
-        y=alt.Y(f'{input_y}:O', axis=alt.Axis(title="Loss metric", titleFontSize=18, titlePadding=15, titleFontWeight=900,
+#def make_heatmap(input_df, input_y, input_x, input_color, input_color_theme):
+    #heatmap = alt.Chart(input_df).mark_rect().encode(
+       # y=alt.Y(f'{input_y}:O', axis=alt.Axis(title="Loss metric", titleFontSize=18, titlePadding=15, titleFontWeight=900,
                                               labelAngle=0)),
-        x=alt.X(f'{input_x}:O', axis=alt.Axis(title=reporting_level, titleFontSize=18, titlePadding=15, titleFontWeight=900)),
-        color=alt.Color(f'max({input_color}):Q',
-                        legend=None,
+       # x=alt.X(f'{input_x}:O', axis=alt.Axis(title=reporting_level, titleFontSize=18, titlePadding=15, titleFontWeight=900)),
+       # color=alt.Color(f'max({input_color}):Q',
+        #                legend=None,
                         scale=alt.Scale(scheme=input_color_theme)),
-        stroke=alt.value('black'),
-        strokeWidth=alt.value(0.25),
-    ).properties(width=900, height=300
-                ).configure_axis(
-        labelFontSize=12,
-        titleFontSize=12
-    ) 
-    return heatmap
+       # stroke=alt.value('black'),
+       # strokeWidth=alt.value(0.25),
+    #).properties(width=900, height=300
+           #     ).configure_axis(
+        #labelFontSize=12,
+        #titleFontSize=12
+    #) 
+    #return heatmap
 
-heatmap1 = make_heatmap(selected_RL_gdf[['Zone-ID', 'l_metric', 'loss_abs', 'Yield loss (%)']], 'l_metric', 'Zone-ID', 'Yield loss (%)', 'oranges')
+#heatmap1 = make_heatmap(selected_RL_gdf[['Zone-ID', 'l_metric', 'loss_abs', 'Yield loss (%)']], 'l_metric', 'Zone-ID', 'Yield loss (%)', 'oranges')
 
-st.altair_chart(heatmap1, use_container_width=True)
+#st.altair_chart(heatmap1, use_container_width=True)
 
 
 # Top 10 bad/good years by UaI zone
