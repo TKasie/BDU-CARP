@@ -22,7 +22,7 @@ st.set_page_config(
 
 
 #Page header/ logo
-#st.logo(image='BDU-CARP-main/index2.png', icon_image='BDU-CARP-main/index2.png')   
+st.logo(image='index2.png', icon_image='index2.png')   
 st.header('Drought-related Yield Loss Estimates for Amhara Region, Ethiopia')
 
 alt.themes.enable("dark")
