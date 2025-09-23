@@ -32,7 +32,7 @@ with st.sidebar.expander("Click here"):
     st.info("This dashboard was built to share [BDU-CARP resaerch findings](https://hats.arizona.edu/baseline-probabilistic-climate-risk-assessment-information-foundation-scaling-smallholder) with the general DRM community and help users to explore drought risk analysis outputs produced by the BDU-CARP research team for Amhara region, Ethiopia. Drought-related yield losses on six important risk metrics are reported at three levels: (1) Insurance zones which are newly defined using an ML cluster algorithm; (2) Livelihood zones as defined by [FEWS NET](https://fews.net/east-africa/ethiopia/livelihood-zone-map/january-2018); and (3) Administrative zones of Amhara region. Users can select their preferred reporting level from the sidebar and explore each of the risk metrics. This is our attept to satisfy the interests of multiple actors operating at different scales of DRM decision making. Note that yield losses are estimated based on the vulnerability curve we established for each insurance zone using a regression model of yield as a function of growing season precipitation anomally. FAO-WaPOR biomass production dataset was used for yield and CHIRIPS dataset for precipitation. Maps shown in the second column of the main panel are expressed as relative losses in percent, relative to exposure, shown at the top; as well as absolute losses in KgDM/ha, shown at the bottom, same column. Users can hover over the map to see specific info.")
 
 
-gdf_file_path = 'rmetric_gdf.shp'
+gdf_file_path = 'BDU-CARP-main/rmetric_gdf.shp'
 @st.cache_data
 def read_gdf(file_path):
     gdf = gpd.read_file(file_path)
@@ -59,21 +59,7 @@ selected_ML_gdf_sorted = selected_ML_gdf[['Zone-ID', 'l_metric', 'Exposure']].so
 
 with col[0]:
     st.markdown('##### Exposure')
-    st.dataframe(selected_ML_gdf_sorted, 
-                 column_order=("Zone-ID", "Exposure"),
-                 hide_index=True,
-                 width=None,
-                 column_config={
-                    "Zone-ID": st.column_config.TextColumn(
-                        "Zone-ID",
-                    ),
-                    "Exposure": st.column_config.ProgressColumn(
-                        "Yield [KgDM/ha]",
-                        format="%.2f",
-                        min_value=0,
-                        max_value=max(selected_ML_gdf_sorted.Exposure),
-                     )}
-                )
+    st.dataframe(selected_ML_gdf_sorted[["Zone-ID", "Exposure"]])
 
 # dataframe for choropleth map
 selected_ML_gdf_loc = selected_ML_gdf.set_index('Zone-ID')
