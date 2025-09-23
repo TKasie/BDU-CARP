@@ -106,21 +106,7 @@ selected_ML_gdf_sorted = selected_ML_gdf[['Zone-ID', 'l_metric', 'loss_rel', 'Yi
 
 with col[2]:
     st.markdown('##### Top Zones')
-    st.dataframe(selected_ML_gdf_sorted, 
-                 column_order=("Zone-ID", "Yield loss (%)"),
-                 hide_index=True,
-                 width=None,
-                 column_config={
-                    "Zone-ID": st.column_config.TextColumn(
-                        "Zone-ID",
-                    ),
-                    "Yield loss (%)": st.column_config.ProgressColumn(
-                        "Yield Loss [%]",
-                        format="%.2f",
-                        min_value=0,
-                        max_value=max(selected_ML_gdf_sorted['loss_rel']),
-                     )}
-                 )
+    st.dataframe(selected_ML_gdf_sorted[["Zone-ID", "Yield loss (%)"]])
 
 # Heatmap
 def make_heatmap(input_df, input_y, input_x, input_color, input_color_theme):
@@ -158,22 +144,7 @@ with col1:
     st.markdown('##### Top 10 Bad Years')
     #uai_zone = st.selectbox('Select an Insurance zone code for bad years', uai_code)
     data_bad = data[data.CWW15==uai_zone][years_str].median().sort_values(ascending=False).reset_index().rename(columns={'index': 'Year', 0:'Rank'})
-    st.dataframe(data_bad, 
-                 column_order=("Year", "Rank"),
-                 hide_index=True,
-                 width=None,
-                 use_container_width=True,
-                 column_config={
-                    "Year": st.column_config.TextColumn(
-                        "Year",
-                    ),
-                    "Rank": st.column_config.ProgressColumn(
-                        "Rank",
-                        format="%.2f",
-                        min_value=0,
-                        max_value=max(data_bad.Rank),
-                     )}
-                )
+    st.dataframe(data_bad[["Year", "Rank"]])
 
 
 with col2:
@@ -183,22 +154,7 @@ with col2:
     data_good = data_bad.copy()
     data_good['Rank']= 1 - data_bad.Rank2
     data_good = data_good.sort_values('Rank', ascending=False)
-    st.dataframe(data_good, 
-                 column_order=("Year", "Rank"),
-                 hide_index=True,
-                 width=None,
-                 use_container_width=True,
-                 column_config={
-                    "Year": st.column_config.TextColumn(
-                        "Year",
-                    ),
-                    "Rank": st.column_config.ProgressColumn(
-                        "Rank",
-                        format="%.2f",
-                        min_value=0,
-                        max_value=max(data_good.Rank),
-                     )}
-                )
+    st.dataframe(data_good[["Year", "Rank"]])
 
 st.subheader('Region-level Top 10 Bad/Good Years')
 col1, col2 = st.columns((1, 1))
@@ -206,22 +162,7 @@ with col1:
     st.markdown('##### Top 10 Bad Years')
     #uai_zone = st.selectbox('Select an Insurance zone code for bad years', uai_code)
     data_bad = data[years_str].median().sort_values(ascending=False).reset_index().rename(columns={'index': 'Year', 0:'Rank'})
-    st.dataframe(data_bad, 
-                 column_order=("Year", "Rank"),
-                 hide_index=True,
-                 width=None,
-                 use_container_width=True,
-                 column_config={
-                    "Year": st.column_config.TextColumn(
-                        "Year",
-                    ),
-                    "Rank": st.column_config.ProgressColumn(
-                        "Rank",
-                        format="%.2f",
-                        min_value=0,
-                        max_value=max(data_bad.Rank),
-                     )}
-                )
+    st.dataframe(data_bad[["Year", "Rank"]])
 
 with col2:
     st.markdown('##### Top 10 Good Years')
@@ -231,22 +172,7 @@ with col2:
     data_good['Rank']= 1 - data_bad.Rank2
     data_good = data_good.sort_values('Rank', ascending=False)
     
-    st.dataframe(data_good, 
-                 column_order=("Year", "Rank"),
-                 hide_index=True,
-                 width=None,
-                 use_container_width=True,
-                 column_config={
-                    "Year": st.column_config.TextColumn(
-                        "Year",
-                    ),
-                    "Rank": st.column_config.ProgressColumn(
-                        "Rank",
-                        format="%.2f",
-                        min_value=0,
-                        max_value=max(data_good.Rank),
-                     )}
-                )
+    st.dataframe(data_good[["Year", "Rank"]])
 
 
 st.markdown(" **Institute website:** https://www.bdu.edu.et/idrmfss **| Outreach focal- tel:** +251 918 71 6473 **| email:** Mossa.Endris@bdu.edu.et")
