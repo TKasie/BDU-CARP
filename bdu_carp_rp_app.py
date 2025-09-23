@@ -22,7 +22,7 @@ st.set_page_config(
 
 
 #Page header/ logo
-#st.logo(image='BDU-CARP-main/Horizontal_RGB_294_White.png', icon_image='BDU-CARP-main/index2.png')   
+st.logo(image='BDU-CARP-main/Horizontal_RGB_294_White.png', icon_image='BDU-CARP-main/index2.png')   
 st.header('Drought-related Yield Loss Estimates for Amhara Region, Ethiopia')
 
 alt.themes.enable("dark")
@@ -32,7 +32,7 @@ with st.sidebar.expander("Click here"):
     st.info("This dashboard was built to share [BDU-CARP resaerch findings](https://hats.arizona.edu/baseline-probabilistic-climate-risk-assessment-information-foundation-scaling-smallholder) with the general DRM community and help users to explore drought risk analysis outputs produced by the BDU-CARP research team for Amhara region, Ethiopia. Drought-related yield losses on six important risk metrics are reported at three levels: (1) Insurance zones which are newly defined using an ML cluster algorithm; (2) Livelihood zones as defined by [FEWS NET](https://fews.net/east-africa/ethiopia/livelihood-zone-map/january-2018); and (3) Administrative zones of Amhara region. Users can select their preferred reporting level from the sidebar and explore each of the risk metrics. This is our attept to satisfy the interests of multiple actors operating at different scales of DRM decision making. Note that yield losses are estimated based on the vulnerability curve we established for each insurance zone using a regression model of yield as a function of growing season precipitation anomally. FAO-WaPOR biomass production dataset was used for yield and CHIRIPS dataset for precipitation. Maps shown in the second column of the main panel are expressed as relative losses in percent, relative to exposure, shown at the top; as well as absolute losses in KgDM/ha, shown at the bottom, same column. Users can hover over the map to see specific info.")
 
 
-gdf_file_path = 'rmetric_gdf.shp'
+gdf_file_path = 'BDU-CARP-main/rmetric_gdf.shp'
 @st.cache_data
 def read_gdf(file_path):
     gdf = gpd.read_file(file_path)
@@ -96,7 +96,7 @@ with col[1]:
                              height=200,
                              legend=dict(orientation="v", yanchor="bottom", y=0.9, xanchor="right", x=0.5))
     choropleth.update_geos(fitbounds='locations', visible=False)
-    st.plotly_chart(choropleth, template='streamlit', use_container_width=True)
+    st.plotly_chart(choropleth, use_container_width=True)
     
     choropleth = px.choropleth(selected_ML_gdf,
                                geojson = selected_ML_gdf_loc.geometry, 
@@ -113,7 +113,7 @@ with col[1]:
                              height=200,
                              legend=dict(orientation="v", yanchor="bottom", y=0.9, xanchor="right", x=0.5))
     choropleth.update_geos(fitbounds='locations', visible=False)
-    st.plotly_chart(choropleth, template='streamlit', use_container_width=True)
+    st.plotly_chart(choropleth, use_container_width=True)
 
 # Top zones sorted by descending order of yield loss
 selected_ML_gdf_sorted = selected_ML_gdf[['Zone-ID', 'l_metric', 'loss_rel', 'Yield loss (%)']].sort_values('Yield loss (%)', ascending=False)
@@ -137,26 +137,26 @@ with col[2]:
                  )
 
 # Heatmap
-#def make_heatmap(input_df, input_y, input_x, input_color, input_color_theme):
-    #heatmap = alt.Chart(input_df).mark_rect().encode(
-       # y=alt.Y(f'{input_y}:O', axis=alt.Axis(title="Loss metric", titleFontSize=18, titlePadding=15, titleFontWeight=900,
-                                             # labelAngle=0)),
-       # x=alt.X(f'{input_x}:O', axis=alt.Axis(title=reporting_level, titleFontSize=18, titlePadding=15, titleFontWeight=900)),
-       # color=alt.Color(f'max({input_color}):Q',
-        #                legend=None,
-                       # scale=alt.Scale(scheme=input_color_theme)),
-       # stroke=alt.value('black'),
-       # strokeWidth=alt.value(0.25),
-    #).properties(width=900, height=300
-           #     ).configure_axis(
-        #labelFontSize=12,
-        #titleFontSize=12
-    #) 
-    #return heatmap
+def make_heatmap(input_df, input_y, input_x, input_color, input_color_theme):
+    heatmap = alt.Chart(input_df).mark_rect().encode(
+        y=alt.Y(f'{input_y}:O', axis=alt.Axis(title="Loss metric", titleFontSize=18, titlePadding=15, titleFontWeight=900,
+                                              labelAngle=0)),
+        x=alt.X(f'{input_x}:O', axis=alt.Axis(title=reporting_level, titleFontSize=18, titlePadding=15, titleFontWeight=900)),
+        color=alt.Color(f'max({input_color}):Q',
+                        legend=None,
+                        scale=alt.Scale(scheme=input_color_theme)),
+        stroke=alt.value('black'),
+        strokeWidth=alt.value(0.25),
+    ).properties(width=900, height=300
+                ).configure_axis(
+        labelFontSize=12,
+        titleFontSize=12
+    ) 
+    return heatmap
 
-#heatmap1 = make_heatmap(selected_RL_gdf[['Zone-ID', 'l_metric', 'loss_abs', 'Yield loss (%)']], 'l_metric', 'Zone-ID', 'Yield loss (%)', 'oranges')
+heatmap1 = make_heatmap(selected_RL_gdf[['Zone-ID', 'l_metric', 'loss_abs', 'Yield loss (%)']], 'l_metric', 'Zone-ID', 'Yield loss (%)', 'oranges')
 
-#st.altair_chart(heatmap1, use_container_width=True)
+st.altair_chart(heatmap1, use_container_width=True)
 
 
 # Top 10 bad/good years by UaI zone
@@ -274,4 +274,3 @@ with st.expander("Contact us"):
         st.text_area("Query","Please specify your request or general comment here")  
         
         submit_button = st.form_submit_button(label='Send Information')
-        
